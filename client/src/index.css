@@ -1,0 +1,260 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    border-color: #000000;
+  }
+
+  body {
+    font-family: 'Space Grotesk', 'Noto Sans Thai', system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    background-color: #ECE6D8;
+    color: #000000;
+    min-height: 100vh;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Space Grotesk', 'Noto Sans Thai', sans-serif;
+    letter-spacing: -0.03em;
+    font-weight: 700;
+  }
+
+  /* Custom 8-bit style scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #ECE6D8;
+    border-left: 3px solid #000000;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #000000;
+    border: 2px solid #ECE6D8;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #EDB92E;
+    border: 2px solid #000000;
+  }
+}
+
+@layer components {
+  /* Cards */
+  .neo-card {
+    background-color: #F7F5EE;
+    border: 3px solid #000000;
+    box-shadow: 4px 4px 0px #000000;
+    border-radius: 6px;
+    padding: 24px;
+  }
+
+  /* Buttons: 3px border, 4px shadow, bold, min 44px height */
+  .neo-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: 'Space Grotesk', 'Noto Sans Thai', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: -0.01em;
+    border: 3px solid #000000;
+    box-shadow: 4px 4px 0px #000000;
+    border-radius: 6px;
+    padding: 10px 20px;
+    min-height: 44px;
+    transition: transform 100ms ease, box-shadow 100ms ease;
+    user-select: none;
+    cursor: pointer;
+  }
+  .neo-btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px #000000;
+  }
+  .neo-btn:active {
+    transform: translate(4px, 4px);
+    box-shadow: 0px 0px 0px #000000;
+  }
+  .neo-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: 4px 4px 0px #000000;
+  }
+
+  .neo-btn-primary {
+    background-color: #2F54EB;
+    color: #FFFFFF;
+  }
+  .neo-btn-primary:hover {
+    background-color: #2344cc;
+  }
+
+  .neo-btn-secondary {
+    background-color: #F7F5EE;
+    color: #000000;
+  }
+  .neo-btn-secondary:hover {
+    background-color: #ECE6D8;
+  }
+
+  .neo-btn-yellow {
+    background-color: #EDB92E;
+    color: #000000;
+  }
+  .neo-btn-yellow:hover {
+    background-color: #daa522;
+  }
+
+  .neo-btn-danger {
+    background-color: #E8505B;
+    color: #FFFFFF;
+  }
+  .neo-btn-danger:hover {
+    background-color: #d13d48;
+  }
+
+  /* Small button for table row actions */
+  .neo-btn-sm {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-family: 'Space Grotesk', 'Noto Sans Thai', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    border: 3px solid #000000;
+    box-shadow: 3px 3px 0px #000000;
+    border-radius: 6px;
+    padding: 6px 12px;
+    min-height: 36px;
+    transition: transform 100ms ease, box-shadow 100ms ease;
+    user-select: none;
+    cursor: pointer;
+  }
+  .neo-btn-sm:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0px #000000;
+  }
+  .neo-btn-sm:active {
+    transform: translate(3px, 3px);
+    box-shadow: 0px 0px 0px #000000;
+  }
+
+  /* Inputs and Selects: soft off-white, 3px border, 12px padding, focus = warm yellow background with 4px blue shadow */
+  .neo-input {
+    width: 100%;
+    background-color: #F7F5EE;
+    border: 3px solid #000000;
+    border-radius: 6px;
+    padding: 12px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #000000;
+    min-height: 48px;
+    transition: background-color 100ms ease, box-shadow 100ms ease;
+    caret-color: #000000;
+  }
+  .neo-input:focus {
+    outline: none;
+    background-color: #EDB92E;
+    box-shadow: 4px 4px 0px #2F54EB;
+  }
+
+  .neo-select {
+    width: 100%;
+    background-color: #F7F5EE;
+    border: 3px solid #000000;
+    border-radius: 6px;
+    padding: 12px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #000000;
+    min-height: 48px;
+    cursor: pointer;
+    transition: background-color 100ms ease, box-shadow 100ms ease;
+  }
+  .neo-select:focus {
+    outline: none;
+    background-color: #EDB92E;
+    box-shadow: 4px 4px 0px #2F54EB;
+  }
+
+  /* Status badges: small rectangular chips, 2px border, bold uppercase */
+  .badge-available {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border: 2px solid #000000;
+    border-radius: 4px;
+    background-color: #48C78E;
+    color: #000000;
+  }
+
+  .badge-rented {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border: 2px solid #000000;
+    border-radius: 4px;
+    background-color: #E8505B;
+    color: #FFFFFF;
+  }
+
+  .badge-maintenance {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border: 2px solid #000000;
+    border-radius: 4px;
+    background-color: #EDB92E;
+    color: #000000;
+  }
+
+  .badge-completed {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border: 2px solid #000000;
+    border-radius: 4px;
+    background-color: #2F54EB;
+    color: #FFFFFF;
+  }
+
+  /* Error Box: coral bordered box under the field */
+  .field-error-box {
+    margin-top: 6px;
+    padding: 6px 10px;
+    background-color: #E8505B;
+    border: 2px solid #000000;
+    border-radius: 4px;
+    color: #FFFFFF;
+    font-size: 12px;
+    font-weight: 700;
+  }
+}
