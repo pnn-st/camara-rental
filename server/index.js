@@ -33,7 +33,23 @@ app.use('/api/rentals', rentalsRouter);
 app.use('/api/returns', returnsRouter);
 app.use('/api/dashboard', dashboardRouter);
 
-// 404 Not Found handler
+const path = require('path');
+
+// Serve client static build if present (Fullstack deployment)
+const clientDistPath = path.join(__dirname, '../client/dist');
+app.use(express.static(clientDistPath));
+
+// Fallback to client/dist/index.html for SPA routes (non-API)
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api')) {
+    return res.status(404).json({ error: `Route not found: ${req.method} ${req.originalUrl}` });
+  }
+  res.sendFile(path.join(clientDistPath, 'index.html'), (err) => {
+    if (err) next();
+  });
+});
+
+// 404 Not Found handler for unhandled requests
 app.use((req, res) => {
   res.status(404).json({ error: `Route not found: ${req.method} ${req.originalUrl}` });
 });
