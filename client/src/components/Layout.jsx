@@ -42,10 +42,10 @@ export default function Layout() {
           LEFT SIDEBAR (DESKTOP) / TOP BAR (MOBILE)
           240px wide on desktop, warm mustard yellow #EDB92E, 3px black right border
          ───────────────────────────────────────────────────────────── */}
-      <aside className="w-full md:w-[240px] md:min-h-screen bg-[#EDB92E] border-b-3 md:border-b-0 md:border-r-3 border-black flex flex-col justify-between shrink-0 z-30">
+      <aside className="w-full md:w-[260px] md:min-h-screen bg-[#EDB92E] border-b-3 md:border-b-0 md:border-r-3 border-black flex flex-col justify-between shrink-0 z-30">
         <div>
           {/* Brand Header */}
-          <div className="p-6 border-b-3 border-black bg-[#F7F5EE]">
+          <div className="p-5 md:p-6 border-b-3 border-black bg-[#F7F5EE]">
             <NavLink to="/dashboard" className="block focus:outline-none">
               <div className="text-2xl font-black uppercase tracking-tight text-black leading-tight">
                 Cam Rental
@@ -60,7 +60,7 @@ export default function Layout() {
           </div>
 
           {/* Navigation Items */}
-          <nav className="p-4 md:p-6 space-y-3">
+          <nav className="p-3 md:p-4 space-y-3">
             <div className="flex md:flex-col gap-2 md:gap-3 overflow-x-auto md:overflow-visible pb-1 md:pb-0">
               {navItems.map((item) => {
                 const Icon = item.icon;
@@ -69,7 +69,7 @@ export default function Layout() {
                     key={item.to}
                     to={item.to}
                     className={({ isActive }) =>
-                      `min-h-[46px] px-3.5 py-2 flex items-center gap-3 border-3 border-black rounded-[6px] font-bold text-sm tracking-tight select-none transition-all duration-100 whitespace-nowrap ${
+                      `min-h-[46px] px-3 py-2 flex items-center gap-2.5 border-3 border-black rounded-[6px] font-bold text-sm tracking-tight select-none transition-all duration-100 ${
                         isActive
                           ? 'bg-[#2F54EB] text-white shadow-[4px_4px_0px_#000000]'
                           : 'bg-[#F7F5EE] text-black shadow-[4px_4px_0px_#000000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_#000000] active:translate-x-1 active:translate-y-1 active:shadow-none'
@@ -77,9 +77,9 @@ export default function Layout() {
                     }
                   >
                     <Icon className="w-5 h-5 stroke-[2.5] shrink-0" />
-                    <div className="flex flex-col text-left leading-tight">
-                      <span className="text-[13px] font-bold tracking-tight">{item.label}</span>
-                      <span className="text-[10px] font-medium opacity-80">{item.subLabel}</span>
+                    <div className="flex flex-col text-left leading-tight min-w-0">
+                      <span className="text-[12px] font-bold tracking-tight whitespace-nowrap">{item.label}</span>
+                      <span className="text-[10px] font-medium opacity-80 whitespace-nowrap">{item.subLabel}</span>
                     </div>
                   </NavLink>
                 );
@@ -89,7 +89,7 @@ export default function Layout() {
         </div>
 
         {/* Sidebar Footer (Desktop only) */}
-        <div className="hidden md:block p-6 border-t-3 border-black bg-[#F7F5EE]">
+        <div className="hidden md:block p-4 border-t-3 border-black bg-[#F7F5EE]">
           <div className="p-3 bg-[#ECE6D8] border-3 border-black rounded-[6px] shadow-[4px_4px_0px_#000000]">
             <div className="text-xs font-black uppercase tracking-wider text-black flex items-center justify-between">
               <span>SYSTEM STATUS</span>
