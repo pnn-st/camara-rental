@@ -9,22 +9,26 @@ import {
 const navItems = [
   {
     to: '/manage',
-    label: 'Equipment',
+    label: 'Equipment & Customers',
+    subLabel: 'อุปกรณ์ & ลูกค้า',
     icon: Package,
   },
   {
     to: '/booking',
-    label: 'Rentals',
+    label: 'Rentals & Booking',
+    subLabel: 'เปิดสัญญาเช่า',
     icon: CalendarDays,
   },
   {
     to: '/returns',
-    label: 'Returns',
+    label: 'Returns & Inspection',
+    subLabel: 'ตรวจรับคืน',
     icon: RotateCcw,
   },
   {
     to: '/dashboard',
     label: 'Dashboard',
+    subLabel: 'แดชบอร์ดสรุปผล',
     icon: LayoutDashboard,
   },
 ];
@@ -46,8 +50,11 @@ export default function Layout() {
               <div className="text-2xl font-black uppercase tracking-tight text-black leading-tight">
                 Cam Rental
               </div>
-              <div className="text-[11px] font-bold uppercase tracking-tight text-neutral-700 mt-0.5 whitespace-nowrap">
+              <div className="text-[11px] font-bold uppercase tracking-tight text-neutral-800 mt-0.5 whitespace-nowrap">
                 Camera & Equipment Rental
+              </div>
+              <div className="text-[10px] text-neutral-600 font-medium">
+                ระบบเช่าอุปกรณ์กล้องและเลนส์
               </div>
             </NavLink>
           </div>
@@ -62,7 +69,7 @@ export default function Layout() {
                     key={item.to}
                     to={item.to}
                     className={({ isActive }) =>
-                      `min-h-[44px] px-4 py-2.5 flex items-center gap-3 border-3 border-black rounded-[6px] font-bold text-sm tracking-tight select-none transition-all duration-100 whitespace-nowrap ${
+                      `min-h-[46px] px-3.5 py-2 flex items-center gap-3 border-3 border-black rounded-[6px] font-bold text-sm tracking-tight select-none transition-all duration-100 whitespace-nowrap ${
                         isActive
                           ? 'bg-[#2F54EB] text-white shadow-[4px_4px_0px_#000000]'
                           : 'bg-[#F7F5EE] text-black shadow-[4px_4px_0px_#000000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_#000000] active:translate-x-1 active:translate-y-1 active:shadow-none'
@@ -70,7 +77,10 @@ export default function Layout() {
                     }
                   >
                     <Icon className="w-5 h-5 stroke-[2.5] shrink-0" />
-                    <span>{item.label}</span>
+                    <div className="flex flex-col text-left leading-tight">
+                      <span className="text-[13px] font-bold tracking-tight">{item.label}</span>
+                      <span className="text-[10px] font-medium opacity-80">{item.subLabel}</span>
+                    </div>
                   </NavLink>
                 );
               })}
@@ -81,16 +91,21 @@ export default function Layout() {
         {/* Sidebar Footer (Desktop only) */}
         <div className="hidden md:block p-6 border-t-3 border-black bg-[#F7F5EE]">
           <div className="p-3 bg-[#ECE6D8] border-3 border-black rounded-[6px] shadow-[4px_4px_0px_#000000]">
-            <div className="text-xs font-black uppercase tracking-wider text-black">
-              Status
+            <div className="text-xs font-black uppercase tracking-wider text-black flex items-center justify-between">
+              <span>SYSTEM STATUS</span>
+              <span className="text-[10px] font-mono text-neutral-600">สถานะ</span>
             </div>
-            <div className="flex items-center gap-2 mt-1">
-              <span className="w-2.5 h-2.5 bg-[#48C78E] border border-black inline-block"></span>
-              <span className="font-pixel text-[9px] text-black">ONLINE :5000</span>
+            <div className="flex items-center gap-2 mt-1.5">
+              <span className="w-2.5 h-2.5 bg-[#48C78E] border border-black inline-block rounded-full"></span>
+              <span className="font-mono font-bold text-[11px] text-black">ONLINE :5000</span>
+            </div>
+            <div className="text-[10px] font-medium text-neutral-600 mt-1">
+              ฐานข้อมูลพร้อมทำงาน (Ready)
             </div>
           </div>
-          <div className="mt-3 text-[11px] font-bold text-neutral-600 font-mono">
-            Topic 30 • 2026
+          <div className="mt-3 text-[11px] font-bold text-neutral-600 font-mono flex items-center justify-between">
+            <span>Topic 30</span>
+            <span>Database</span>
           </div>
         </div>
       </aside>

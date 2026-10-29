@@ -424,11 +424,11 @@ export default function EquipmentCustomerPage() {
   function renderStatusBadge(status) {
     switch (status) {
       case 'Available':
-        return <span className="badge-available">AVAILABLE</span>;
+        return <span className="badge-available">Available (พร้อมเช่า)</span>;
       case 'Rented':
-        return <span className="badge-rented">RENTED</span>;
+        return <span className="badge-rented">Rented (กำลังเช่า)</span>;
       case 'Maintenance':
-        return <span className="badge-maintenance">MAINTENANCE</span>;
+        return <span className="badge-maintenance">Maintenance (ส่งซ่อม)</span>;
       default:
         return (
           <span className="inline-flex items-center px-2 py-0.5 text-xs font-bold border-2 border-black rounded-[4px] bg-[#F7F5EE] text-black uppercase">
@@ -445,11 +445,19 @@ export default function EquipmentCustomerPage() {
          ───────────────────────────────────────────────────────────── */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-2">
         <div className="text-left">
-          <h1 className="text-4xl font-bold tracking-tight text-black uppercase leading-none">
-            Equipment & Customers
-          </h1>
-          <p className="text-base text-neutral-800 mt-2 font-medium">
-            Inventory catalog, serial tracking, rates, and customer profiles.
+          <div className="flex items-center gap-3">
+            <h1 className="text-4xl font-bold tracking-tight text-black uppercase leading-none">
+              Equipment & Customers
+            </h1>
+            <span className="px-2.5 py-1 bg-[#EDB92E] border-2 border-black rounded-[4px] text-xs font-bold uppercase tracking-wider text-black">
+              จัดการอุปกรณ์และลูกค้า
+            </span>
+          </div>
+          <p className="text-sm sm:text-base text-neutral-800 mt-2 font-medium">
+            Equipment catalog, availability tracking, customer directory, and contact records.
+            <span className="block text-xs text-neutral-600 font-normal mt-0.5">
+              (ทะเบียนรายการอุปกรณ์ในคลัง ตรวจสอบสถานะการใช้งาน พร้อมฐานข้อมูลลูกค้าและประวัติการติดต่อ)
+            </span>
           </p>
         </div>
 
@@ -466,7 +474,7 @@ export default function EquipmentCustomerPage() {
                 (activeTab === 'equipment' ? refreshingEq : refreshingCust) ? 'animate-spin' : ''
               }`}
             />
-            <span>Refresh</span>
+            <span>Refresh <span className="text-xs font-normal opacity-80">(รีเฟรช)</span></span>
           </button>
           <button
             type="button"
@@ -474,7 +482,13 @@ export default function EquipmentCustomerPage() {
             className="neo-btn neo-btn-yellow"
           >
             <Plus className="w-5 h-5 stroke-[2.5]" />
-            <span>{activeTab === 'equipment' ? '+ Add Equipment' : '+ Add Customer'}</span>
+            <span>
+              {activeTab === 'equipment' ? (
+                <>Add Equipment <span className="text-xs font-normal opacity-80">(+เพิ่มอุปกรณ์)</span></>
+              ) : (
+                <>Add Customer <span className="text-xs font-normal opacity-80">(+เพิ่มลูกค้า)</span></>
+              )}
+            </span>
           </button>
         </div>
       </div>
@@ -493,7 +507,12 @@ export default function EquipmentCustomerPage() {
           }`}
         >
           <Camera className="w-5 h-5 stroke-[2.5]" />
-          <span>Equipment Catalog</span>
+          <span>
+            Equipment Catalog
+            <span className="text-xs font-normal normal-case block sm:inline opacity-80 sm:ml-1.5">
+              (รายการอุปกรณ์)
+            </span>
+          </span>
           <span
             className={`px-2 py-0.5 rounded-[4px] border border-black font-mono text-xs font-bold ${
               activeTab === 'equipment' ? 'bg-[#EDB92E] text-black' : 'bg-[#ECE6D8] text-black'
@@ -513,7 +532,12 @@ export default function EquipmentCustomerPage() {
           }`}
         >
           <Users className="w-5 h-5 stroke-[2.5]" />
-          <span>Customer Directory</span>
+          <span>
+            Customer Directory
+            <span className="text-xs font-normal normal-case block sm:inline opacity-80 sm:ml-1.5">
+              (ข้อมูลลูกค้า)
+            </span>
+          </span>
           <span
             className={`px-2 py-0.5 rounded-[4px] border border-black font-mono text-xs font-bold ${
               activeTab === 'customers' ? 'bg-[#EDB92E] text-black' : 'bg-[#ECE6D8] text-black'
@@ -561,7 +585,7 @@ export default function EquipmentCustomerPage() {
                 <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-600" />
                 <input
                   type="text"
-                  placeholder="Search name, serial number..."
+                  placeholder="Search equipment name, serial number... (ค้นหาอุปกรณ์)"
                   value={eqSearch}
                   onChange={(e) => setEqSearch(e.target.value)}
                   className="neo-input pl-10"
@@ -574,7 +598,7 @@ export default function EquipmentCustomerPage() {
                   onChange={(e) => setFilterCategory(e.target.value)}
                   className="neo-select"
                 >
-                  <option value="">All Categories</option>
+                  <option value="">All Categories (ทุกหมวดหมู่)</option>
                   {categories.map((c) => (
                     <option key={c.category_id} value={c.category_id}>
                       {c.category_name}
@@ -589,10 +613,10 @@ export default function EquipmentCustomerPage() {
                   onChange={(e) => setFilterStatus(e.target.value)}
                   className="neo-select"
                 >
-                  <option value="">All Statuses</option>
-                  <option value="Available">Available</option>
-                  <option value="Rented">Rented</option>
-                  <option value="Maintenance">Maintenance</option>
+                  <option value="">All Statuses (ทุกสถานะ)</option>
+                  <option value="Available">Available (พร้อมให้เช่า)</option>
+                  <option value="Rented">Rented (กำลังถูกเช่า)</option>
+                  <option value="Maintenance">Maintenance (ส่งซ่อมบำรุง)</option>
                 </select>
               </div>
             </div>
@@ -600,7 +624,7 @@ export default function EquipmentCustomerPage() {
             <div className="mt-4 pt-3 border-t-2 border-black/10 flex items-center justify-between text-xs font-bold text-neutral-700">
               <span>
                 Showing <strong className="text-black font-mono">{filteredEquipment.length}</strong> of{' '}
-                <span className="font-mono text-black">{equipmentList.length}</span> total items
+                <span className="font-mono text-black">{equipmentList.length}</span> items (แสดง {filteredEquipment.length} ชิ้น)
               </span>
               {(eqSearch || filterCategory || filterStatus) && (
                 <button
@@ -612,7 +636,7 @@ export default function EquipmentCustomerPage() {
                   }}
                   className="text-black underline font-bold hover:text-[#E8505B]"
                 >
-                  [ Clear Filters ]
+                  [ Clear Filters (ล้างตัวกรอง) ]
                 </button>
               )}
             </div>
@@ -623,25 +647,48 @@ export default function EquipmentCustomerPage() {
             {loadingEq ? (
               <div className="p-16 text-center text-black">
                 <RefreshCw className="w-8 h-8 animate-spin mx-auto text-black mb-3" />
-                <p className="text-sm font-bold uppercase tracking-wider">Loading equipment inventory...</p>
+                <p className="text-sm font-bold uppercase tracking-wider">Loading Equipment Catalog...</p>
+                <p className="text-xs font-normal text-neutral-600 mt-1">(กำลังโหลดรายการอุปกรณ์)</p>
               </div>
             ) : filteredEquipment.length === 0 ? (
               <div className="p-16 text-center text-black">
                 <Camera className="w-12 h-12 mx-auto text-neutral-400 mb-3" />
-                <p className="text-base font-bold">No equipment found matching criteria.</p>
+                <p className="text-base font-bold">No equipment items match the search filters.</p>
+                <p className="text-xs font-normal text-neutral-600 mt-1">(ไม่พบอุปกรณ์ที่ตรงตามเงื่อนไขการค้นหา)</p>
               </div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm text-black border-collapse">
                   <thead className="bg-[#EDB92E] text-black text-xs font-bold uppercase tracking-wider border-b-3 border-black">
                     <tr>
-                      <th className="px-4 py-3.5 text-center w-16 border-r-2 border-black/20">ID</th>
-                      <th className="px-4 py-3.5 border-r-2 border-black/20">Equipment Name</th>
-                      <th className="px-4 py-3.5 border-r-2 border-black/20">Category</th>
-                      <th className="px-4 py-3.5 border-r-2 border-black/20">Serial Number</th>
-                      <th className="px-4 py-3.5 text-right border-r-2 border-black/20">Daily Rate</th>
-                      <th className="px-4 py-3.5 text-center border-r-2 border-black/20">Status</th>
-                      <th className="px-4 py-3.5 text-center w-36">Actions</th>
+                      <th className="px-4 py-3.5 text-center w-16 border-r-2 border-black/20">
+                        ID
+                        <span className="text-[10px] font-normal block text-neutral-800">รหัส</span>
+                      </th>
+                      <th className="px-4 py-3.5 border-r-2 border-black/20">
+                        Equipment Name
+                        <span className="text-[10px] font-normal block text-neutral-800">ชื่ออุปกรณ์</span>
+                      </th>
+                      <th className="px-4 py-3.5 border-r-2 border-black/20">
+                        Category
+                        <span className="text-[10px] font-normal block text-neutral-800">หมวดหมู่</span>
+                      </th>
+                      <th className="px-4 py-3.5 border-r-2 border-black/20">
+                        Serial Number
+                        <span className="text-[10px] font-normal block text-neutral-800">ซีเรียล</span>
+                      </th>
+                      <th className="px-4 py-3.5 text-right border-r-2 border-black/20">
+                        Daily Rate
+                        <span className="text-[10px] font-normal block text-neutral-800">ค่าเช่า/วัน</span>
+                      </th>
+                      <th className="px-4 py-3.5 text-center border-r-2 border-black/20">
+                        Status
+                        <span className="text-[10px] font-normal block text-neutral-800">สถานะ</span>
+                      </th>
+                      <th className="px-4 py-3.5 text-center w-40">
+                        Actions
+                        <span className="text-[10px] font-normal block text-neutral-800">จัดการ</span>
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="divide-y-2 divide-black/10">
@@ -678,16 +725,16 @@ export default function EquipmentCustomerPage() {
                               type="button"
                               onClick={() => openEditEqModal(item)}
                               className="neo-btn-sm neo-btn-yellow"
-                              title="Edit"
+                              title="Edit Equipment (แก้ไข)"
                             >
                               <Edit2 className="w-3.5 h-3.5 stroke-[2.5]" />
-                              <span>Edit</span>
+                              <span>Edit <span className="text-[10px] font-normal opacity-80">(แก้ไข)</span></span>
                             </button>
                             <button
                               type="button"
                               onClick={() => setDeletingEqId(item.equipment_id)}
                               className="neo-btn-sm neo-btn-danger"
-                              title="Delete"
+                              title="Delete Equipment (ลบ)"
                             >
                               <Trash2 className="w-3.5 h-3.5 stroke-[2.5]" />
                             </button>
@@ -711,7 +758,11 @@ export default function EquipmentCustomerPage() {
                       <Camera className="w-4 h-4 stroke-[2.5]" />
                     </div>
                     <h2 className="text-xl font-bold text-black uppercase m-0">
-                      {eqModalMode === 'create' ? 'Add Equipment' : `Edit Equipment (#${editingEqId})`}
+                      {eqModalMode === 'create' ? (
+                        <>Add Equipment <span className="text-sm font-normal normal-case opacity-80">(เพิ่มอุปกรณ์ใหม่)</span></>
+                      ) : (
+                        <>Edit Equipment #{editingEqId} <span className="text-sm font-normal normal-case opacity-80">(แก้ไขอุปกรณ์)</span></>
+                      )}
                     </h2>
                   </div>
                   <button
@@ -733,14 +784,14 @@ export default function EquipmentCustomerPage() {
                 <form onSubmit={handleEqSubmit} className="mt-5 space-y-4">
                   <div>
                     <label className="block text-xs font-bold text-black uppercase tracking-wider mb-1.5">
-                      Category <span className="text-[#E8505B]">*</span>
+                      Category <span className="text-[11px] font-normal text-neutral-600 lowercase">(หมวดหมู่อุปกรณ์)</span> <span className="text-[#E8505B]">*</span>
                     </label>
                     <select
                       value={eqFormData.category_id}
                       onChange={(e) => handleEqChange('category_id', e.target.value)}
                       className="neo-select"
                     >
-                      <option value="">-- Select Category --</option>
+                      <option value="">-- Select Category (เลือกหมวดหมู่) --</option>
                       {categories.map((c) => (
                         <option key={c.category_id} value={c.category_id}>
                           {c.category_name}
@@ -754,7 +805,7 @@ export default function EquipmentCustomerPage() {
 
                   <div>
                     <label className="block text-xs font-bold text-black uppercase tracking-wider mb-1.5">
-                      Equipment Name <span className="text-[#E8505B]">*</span>
+                      Equipment Name <span className="text-[11px] font-normal text-neutral-600 lowercase">(ชื่ออุปกรณ์)</span> <span className="text-[#E8505B]">*</span>
                     </label>
                     <input
                       type="text"
@@ -770,7 +821,7 @@ export default function EquipmentCustomerPage() {
 
                   <div>
                     <label className="block text-xs font-bold text-black uppercase tracking-wider mb-1.5">
-                      Serial Number <span className="text-[#E8505B]">* (Unique)</span>
+                      Serial Number <span className="text-[11px] font-normal text-neutral-600 lowercase">(หมายเลขซีเรียล)</span> <span className="text-[#E8505B]">* (Unique / ห้ามซ้ำ)</span>
                     </label>
                     <input
                       type="text"
@@ -787,7 +838,7 @@ export default function EquipmentCustomerPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-bold text-black uppercase tracking-wider mb-1.5">
-                        Daily Rate (THB) <span className="text-[#E8505B]">*</span>
+                        Daily Rate (THB) <span className="text-[11px] font-normal text-neutral-600 lowercase">(ค่าเช่าต่อวัน)</span> <span className="text-[#E8505B]">*</span>
                       </label>
                       <div className="relative">
                         <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-black font-bold text-sm">
@@ -810,16 +861,16 @@ export default function EquipmentCustomerPage() {
 
                     <div>
                       <label className="block text-xs font-bold text-black uppercase tracking-wider mb-1.5">
-                        Status <span className="text-[#E8505B]">*</span>
+                        Status <span className="text-[11px] font-normal text-neutral-600 lowercase">(สถานะอุปกรณ์)</span> <span className="text-[#E8505B]">*</span>
                       </label>
                       <select
                         value={eqFormData.status}
                         onChange={(e) => handleEqChange('status', e.target.value)}
                         className="neo-select"
                       >
-                        <option value="Available">Available</option>
-                        <option value="Rented">Rented</option>
-                        <option value="Maintenance">Maintenance</option>
+                        <option value="Available">Available (พร้อมให้เช่า)</option>
+                        <option value="Rented">Rented (กำลังถูกเช่า)</option>
+                        <option value="Maintenance">Maintenance (ส่งซ่อมบำรุง)</option>
                       </select>
                       {eqFormErrors.status && (
                         <div className="field-error-box">{eqFormErrors.status}</div>
@@ -834,7 +885,7 @@ export default function EquipmentCustomerPage() {
                       disabled={submittingEq}
                       className="neo-btn neo-btn-secondary"
                     >
-                      Cancel
+                      Cancel <span className="text-xs font-normal opacity-80">(ยกเลิก)</span>
                     </button>
                     <button
                       type="submit"
@@ -842,7 +893,13 @@ export default function EquipmentCustomerPage() {
                       className="neo-btn neo-btn-primary"
                     >
                       {submittingEq && <RefreshCw className="w-4 h-4 animate-spin" />}
-                      <span>{eqModalMode === 'create' ? 'Save Equipment' : 'Update Equipment'}</span>
+                      <span>
+                        {eqModalMode === 'create' ? (
+                          <>Save Equipment <span className="text-xs font-normal opacity-80">(บันทึก)</span></>
+                        ) : (
+                          <>Update Equipment <span className="text-xs font-normal opacity-80">(อัปเดต)</span></>
+                        )}
+                      </span>
                     </button>
                   </div>
                 </form>
@@ -857,10 +914,13 @@ export default function EquipmentCustomerPage() {
                 <div className="w-12 h-12 rounded-[6px] bg-[#E8505B] border-3 border-black shadow-[3px_3px_0px_#000000] flex items-center justify-center mx-auto mb-4 text-white">
                   <Trash2 className="w-6 h-6 stroke-[2.5]" />
                 </div>
-                <h3 className="text-xl font-bold text-black uppercase">Confirm Delete</h3>
+                <h3 className="text-xl font-bold text-black uppercase">Confirm Equipment Deletion</h3>
                 <p className="text-sm font-medium text-neutral-800 mt-2">
                   Are you sure you want to delete equipment <strong className="font-mono text-black">#{deletingEqId}</strong>?
                   This action cannot be undone.
+                  <span className="block text-xs text-neutral-600 mt-1">
+                    (คุณแน่ใจหรือไม่ว่าต้องการลบอุปกรณ์นี้? การกระทำนี้ไม่สามารถย้อนกลับได้)
+                  </span>
                 </p>
                 <div className="mt-6 flex items-center justify-center gap-3">
                   <button
@@ -869,7 +929,7 @@ export default function EquipmentCustomerPage() {
                     disabled={submittingEq}
                     className="neo-btn neo-btn-secondary"
                   >
-                    Cancel
+                    Cancel <span className="text-xs font-normal opacity-80">(ยกเลิก)</span>
                   </button>
                   <button
                     type="button"
@@ -877,7 +937,7 @@ export default function EquipmentCustomerPage() {
                     disabled={submittingEq}
                     className="neo-btn neo-btn-danger"
                   >
-                    {submittingEq ? 'Deleting...' : 'Confirm Delete'}
+                    {submittingEq ? 'Deleting... (กำลังลบ)' : 'Delete Equipment (ยืนยันการลบ)'}
                   </button>
                 </div>
               </div>
@@ -922,7 +982,7 @@ export default function EquipmentCustomerPage() {
               <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-600" />
               <input
                 type="text"
-                placeholder="Search customer name, email, phone, or ID card number..."
+                placeholder="Search customer name, email, phone, or national ID... (ค้นหาลูกค้า)"
                 value={custSearch}
                 onChange={(e) => setCustSearch(e.target.value)}
                 className="neo-input pl-10"
@@ -932,7 +992,7 @@ export default function EquipmentCustomerPage() {
             <div className="mt-4 pt-3 border-t-2 border-black/10 flex items-center justify-between text-xs font-bold text-neutral-700">
               <span>
                 Showing <strong className="text-black font-mono">{filteredCustomers.length}</strong> of{' '}
-                <span className="font-mono text-black">{customerList.length}</span> total customers
+                <span className="font-mono text-black">{customerList.length}</span> customers (แสดง {filteredCustomers.length} ราย)
               </span>
               {custSearch && (
                 <button
@@ -940,7 +1000,7 @@ export default function EquipmentCustomerPage() {
                   onClick={() => setCustSearch('')}
                   className="text-black underline font-bold hover:text-[#E8505B]"
                 >
-                  [ Clear Search ]
+                  [ Clear Search (ล้างการค้นหา) ]
                 </button>
               )}
             </div>
@@ -951,24 +1011,44 @@ export default function EquipmentCustomerPage() {
             {loadingCust ? (
               <div className="p-16 text-center text-black">
                 <RefreshCw className="w-8 h-8 animate-spin mx-auto text-black mb-3" />
-                <p className="text-sm font-bold uppercase tracking-wider">Loading customer database...</p>
+                <p className="text-sm font-bold uppercase tracking-wider">Loading Customer Directory...</p>
+                <p className="text-xs font-normal text-neutral-600 mt-1">(กำลังโหลดฐานข้อมูลลูกค้า)</p>
               </div>
             ) : filteredCustomers.length === 0 ? (
               <div className="p-16 text-center text-black">
                 <Users className="w-12 h-12 mx-auto text-neutral-400 mb-3" />
-                <p className="text-base font-bold">No customers found matching criteria.</p>
+                <p className="text-base font-bold">No customers match the search criteria.</p>
+                <p className="text-xs font-normal text-neutral-600 mt-1">(ไม่พบข้อมูลลูกค้าที่ตรงตามเงื่อนไขการค้นหา)</p>
               </div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm text-black border-collapse">
                   <thead className="bg-[#EDB92E] text-black text-xs font-bold uppercase tracking-wider border-b-3 border-black">
                     <tr>
-                      <th className="px-4 py-3.5 text-center w-16 border-r-2 border-black/20">ID</th>
-                      <th className="px-4 py-3.5 border-r-2 border-black/20">Full Name</th>
-                      <th className="px-4 py-3.5 border-r-2 border-black/20">Email</th>
-                      <th className="px-4 py-3.5 border-r-2 border-black/20">Phone Number</th>
-                      <th className="px-4 py-3.5 border-r-2 border-black/20">ID Card (National ID)</th>
-                      <th className="px-4 py-3.5 text-center w-36">Actions</th>
+                      <th className="px-4 py-3.5 text-center w-16 border-r-2 border-black/20">
+                        ID
+                        <span className="text-[10px] font-normal block text-neutral-800">รหัส</span>
+                      </th>
+                      <th className="px-4 py-3.5 border-r-2 border-black/20">
+                        Customer Name
+                        <span className="text-[10px] font-normal block text-neutral-800">ชื่อ-นามสกุล</span>
+                      </th>
+                      <th className="px-4 py-3.5 border-r-2 border-black/20">
+                        Email Address
+                        <span className="text-[10px] font-normal block text-neutral-800">อีเมล</span>
+                      </th>
+                      <th className="px-4 py-3.5 border-r-2 border-black/20">
+                        Phone Number
+                        <span className="text-[10px] font-normal block text-neutral-800">เบอร์โทรศัพท์</span>
+                      </th>
+                      <th className="px-4 py-3.5 border-r-2 border-black/20">
+                        National ID
+                        <span className="text-[10px] font-normal block text-neutral-800">เลขบัตรประชาชน</span>
+                      </th>
+                      <th className="px-4 py-3.5 text-center w-40">
+                        Actions
+                        <span className="text-[10px] font-normal block text-neutral-800">จัดการ</span>
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="divide-y-2 divide-black/10">
@@ -1000,16 +1080,16 @@ export default function EquipmentCustomerPage() {
                               type="button"
                               onClick={() => openEditCustModal(cust)}
                               className="neo-btn-sm neo-btn-yellow"
-                              title="Edit"
+                              title="Edit Customer (แก้ไข)"
                             >
                               <Edit2 className="w-3.5 h-3.5 stroke-[2.5]" />
-                              <span>Edit</span>
+                              <span>Edit <span className="text-[10px] font-normal opacity-80">(แก้ไข)</span></span>
                             </button>
                             <button
                               type="button"
                               onClick={() => setDeletingCustId(cust.customer_id)}
                               className="neo-btn-sm neo-btn-danger"
-                              title="Delete"
+                              title="Delete Customer (ลบ)"
                             >
                               <Trash2 className="w-3.5 h-3.5 stroke-[2.5]" />
                             </button>
@@ -1033,7 +1113,11 @@ export default function EquipmentCustomerPage() {
                       <Users className="w-4 h-4 stroke-[2.5]" />
                     </div>
                     <h2 className="text-xl font-bold text-black uppercase m-0">
-                      {custModalMode === 'create' ? 'Add Customer' : `Edit Customer (#${editingCustId})`}
+                      {custModalMode === 'create' ? (
+                        <>Add Customer <span className="text-sm font-normal normal-case opacity-80">(เพิ่มลูกค้าใหม่)</span></>
+                      ) : (
+                        <>Edit Customer #{editingCustId} <span className="text-sm font-normal normal-case opacity-80">(แก้ไขลูกค้า)</span></>
+                      )}
                     </h2>
                   </div>
                   <button
@@ -1055,11 +1139,11 @@ export default function EquipmentCustomerPage() {
                 <form onSubmit={handleCustSubmit} className="mt-5 space-y-4">
                   <div>
                     <label className="block text-xs font-bold text-black uppercase tracking-wider mb-1.5">
-                      Full Name <span className="text-[#E8505B]">*</span>
+                      Full Name <span className="text-[11px] font-normal text-neutral-600 lowercase">(ชื่อ-นามสกุล)</span> <span className="text-[#E8505B]">*</span>
                     </label>
                     <input
                       type="text"
-                      placeholder="e.g. Jane Doe, สมชาย ใจดี"
+                      placeholder="e.g. Somchai Jaidee, Jane Doe"
                       value={custFormData.full_name}
                       onChange={(e) => handleCustChange('full_name', e.target.value)}
                       className="neo-input"
@@ -1071,7 +1155,7 @@ export default function EquipmentCustomerPage() {
 
                   <div>
                     <label className="block text-xs font-bold text-black uppercase tracking-wider mb-1.5">
-                      Email <span className="text-[#E8505B]">* (Unique)</span>
+                      Email Address <span className="text-[11px] font-normal text-neutral-600 lowercase">(อีเมล)</span> <span className="text-[#E8505B]">* (Unique / ห้ามซ้ำ)</span>
                     </label>
                     <input
                       type="email"
@@ -1087,7 +1171,7 @@ export default function EquipmentCustomerPage() {
 
                   <div>
                     <label className="block text-xs font-bold text-black uppercase tracking-wider mb-1.5">
-                      Phone Number <span className="text-[#E8505B]">*</span>
+                      Phone Number <span className="text-[11px] font-normal text-neutral-600 lowercase">(เบอร์โทรศัพท์)</span> <span className="text-[#E8505B]">*</span>
                     </label>
                     <input
                       type="tel"
@@ -1103,7 +1187,7 @@ export default function EquipmentCustomerPage() {
 
                   <div>
                     <label className="block text-xs font-bold text-black uppercase tracking-wider mb-1.5">
-                      ID Card Number <span className="text-[#E8505B]">* (13 digits)</span>
+                      National ID Card (13 Digits) <span className="text-[11px] font-normal text-neutral-600 lowercase">(เลขบัตรประชาชน)</span> <span className="text-[#E8505B]">*</span>
                     </label>
                     <input
                       type="text"
@@ -1125,7 +1209,7 @@ export default function EquipmentCustomerPage() {
                       disabled={submittingCust}
                       className="neo-btn neo-btn-secondary"
                     >
-                      Cancel
+                      Cancel <span className="text-xs font-normal opacity-80">(ยกเลิก)</span>
                     </button>
                     <button
                       type="submit"
@@ -1133,7 +1217,13 @@ export default function EquipmentCustomerPage() {
                       className="neo-btn neo-btn-primary"
                     >
                       {submittingCust && <RefreshCw className="w-4 h-4 animate-spin" />}
-                      <span>{custModalMode === 'create' ? 'Save Customer' : 'Update Customer'}</span>
+                      <span>
+                        {custModalMode === 'create' ? (
+                          <>Save Customer <span className="text-xs font-normal opacity-80">(บันทึก)</span></>
+                        ) : (
+                          <>Update Customer <span className="text-xs font-normal opacity-80">(อัปเดต)</span></>
+                        )}
+                      </span>
                     </button>
                   </div>
                 </form>
@@ -1148,10 +1238,13 @@ export default function EquipmentCustomerPage() {
                 <div className="w-12 h-12 rounded-[6px] bg-[#E8505B] border-3 border-black shadow-[3px_3px_0px_#000000] flex items-center justify-center mx-auto mb-4 text-white">
                   <Trash2 className="w-6 h-6 stroke-[2.5]" />
                 </div>
-                <h3 className="text-xl font-bold text-black uppercase">Confirm Delete</h3>
+                <h3 className="text-xl font-bold text-black uppercase">Confirm Customer Deletion</h3>
                 <p className="text-sm font-medium text-neutral-800 mt-2">
                   Are you sure you want to delete customer <strong className="font-mono text-black">#{deletingCustId}</strong>?
                   This action cannot be undone.
+                  <span className="block text-xs text-neutral-600 mt-1">
+                    (คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลลูกค้านี้? การกระทำนี้ไม่สามารถย้อนกลับได้)
+                  </span>
                 </p>
                 <div className="mt-6 flex items-center justify-center gap-3">
                   <button
@@ -1160,7 +1253,7 @@ export default function EquipmentCustomerPage() {
                     disabled={submittingCust}
                     className="neo-btn neo-btn-secondary"
                   >
-                    Cancel
+                    Cancel <span className="text-xs font-normal opacity-80">(ยกเลิก)</span>
                   </button>
                   <button
                     type="button"
@@ -1168,7 +1261,7 @@ export default function EquipmentCustomerPage() {
                     disabled={submittingCust}
                     className="neo-btn neo-btn-danger"
                   >
-                    {submittingCust ? 'Deleting...' : 'Confirm Delete'}
+                    {submittingCust ? 'Deleting... (กำลังลบ)' : 'Delete Customer (ยืนยันการลบ)'}
                   </button>
                 </div>
               </div>

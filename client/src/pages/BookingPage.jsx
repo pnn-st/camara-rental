@@ -282,11 +282,19 @@ export default function BookingPage() {
          ───────────────────────────────────────────────────────────── */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-2">
         <div className="text-left">
-          <h1 className="text-4xl font-bold tracking-tight text-black uppercase leading-none">
-            Rentals & Booking
-          </h1>
-          <p className="text-base text-neutral-800 mt-2 font-medium">
-            Create contracts, select equipment items, verify scheduling conflicts, and calculate rental fees.
+          <div className="flex items-center gap-3">
+            <h1 className="text-4xl font-bold tracking-tight text-black uppercase leading-none">
+              Rentals & Booking
+            </h1>
+            <span className="px-2.5 py-1 bg-[#EDB92E] border-2 border-black rounded-[4px] text-xs font-bold uppercase tracking-wider text-black">
+              เปิดสัญญาเช่าอุปกรณ์
+            </span>
+          </div>
+          <p className="text-sm sm:text-base text-neutral-800 mt-2 font-medium">
+            Create new rental contract, check equipment availability, calculate insurance, and record security deposit.
+            <span className="block text-xs text-neutral-600 font-normal mt-0.5">
+              (สร้างสัญญาเช่าใหม่ เลือกลูกค้า ตรวจสอบคิวอุปกรณ์อัตโนมัติ คำนวณเบี้ยประกัน และบันทึกเงินมัดจำผ่าน Stored Procedure)
+            </span>
           </p>
         </div>
 
@@ -296,7 +304,7 @@ export default function BookingPage() {
           className="neo-btn neo-btn-secondary shrink-0"
         >
           <RefreshCw className="w-4 h-4 stroke-[2.5]" />
-          <span>Reset Form</span>
+          <span>Reset Form <span className="text-xs font-normal opacity-80">(ล้างฟอร์ม)</span></span>
         </button>
       </div>
 
@@ -308,13 +316,13 @@ export default function BookingPage() {
               <AlertCircle className="w-5 h-5 stroke-[2.5] shrink-0 mt-0.5" />
               <div className="flex-1">
                 <div className="text-xs font-bold uppercase tracking-wider">
-                  Database Transaction Error (Rolled Back)
+                  Database Transaction Error (Rolled Back) <span className="font-normal opacity-90">• ข้อผิดพลาดในธุรกรรมฐานข้อมูล</span>
                 </div>
                 <div className="mt-1 p-2.5 bg-[#F7F5EE] border-2 border-black rounded-[4px] font-mono text-xs font-bold text-black break-words">
                   {serverError}
                 </div>
                 <p className="mt-1 text-[11px] font-bold text-white/90">
-                  Automatic rollback executed. System integrity preserved.
+                  Automatic rollback executed. No partial data was committed to the database. (ระบบย้อนกลับรายการอัตโนมัติ)
                 </p>
               </div>
             </div>
@@ -337,23 +345,23 @@ export default function BookingPage() {
               <CheckCircle2 className="w-6 h-6 stroke-[2.5] shrink-0 mt-0.5" />
               <div>
                 <h3 className="text-lg font-bold uppercase tracking-tight">
-                  Rental Contract Created Successfully
+                  Rental Contract Created Successfully <span className="text-sm font-normal normal-case block sm:inline">(เปิดสัญญาเช่าอุปกรณ์สำเร็จ)</span>
                 </h3>
                 <div className="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-3">
                   <div className="p-2.5 bg-[#F7F5EE] border-2 border-black rounded-[4px]">
-                    <span className="text-[10px] font-bold text-neutral-600 uppercase block">Contract ID</span>
+                    <span className="text-[10px] font-bold text-neutral-600 uppercase block">Contract ID (เลขที่สัญญา)</span>
                     <strong className="text-lg font-mono font-bold text-black">#{successResult.rental_id}</strong>
                   </div>
                   <div className="p-2.5 bg-[#F7F5EE] border-2 border-black rounded-[4px]">
-                    <span className="text-[10px] font-bold text-neutral-600 uppercase block">Equipment Count</span>
-                    <strong className="text-base font-bold text-black">{successResult.itemsCount} Items</strong>
+                    <span className="text-[10px] font-bold text-neutral-600 uppercase block">Equipment Count (จำนวนอุปกรณ์)</span>
+                    <strong className="text-base font-bold text-black">{successResult.itemsCount} Units (ชิ้น)</strong>
                   </div>
                   <div className="p-2.5 bg-[#F7F5EE] border-2 border-black rounded-[4px]">
-                    <span className="text-[10px] font-bold text-neutral-600 uppercase block">Duration</span>
-                    <strong className="text-base font-bold text-black">{successResult.days} Days</strong>
+                    <span className="text-[10px] font-bold text-neutral-600 uppercase block">Duration (ระยะเวลาเช่า)</span>
+                    <strong className="text-base font-bold text-black">{successResult.days} Days (วัน)</strong>
                   </div>
                   <div className="p-2.5 bg-[#F7F5EE] border-2 border-black rounded-[4px]">
-                    <span className="text-[10px] font-bold text-neutral-600 uppercase block">Total Fee</span>
+                    <span className="text-[10px] font-bold text-neutral-600 uppercase block">Total Rental Fee (ยอดรวม)</span>
                     <strong className="text-base font-mono font-bold text-black">
                       ฿{successResult.totalFee.toLocaleString('th-TH', { minimumFractionDigits: 2 })}
                     </strong>
@@ -375,7 +383,8 @@ export default function BookingPage() {
       {loading ? (
         <div className="neo-card p-16 text-center text-black">
           <RefreshCw className="w-8 h-8 animate-spin mx-auto text-black mb-3" />
-          <p className="text-sm font-bold uppercase tracking-wider">Loading rental references...</p>
+          <p className="text-sm font-bold uppercase tracking-wider">Loading Reference Data & Inventory...</p>
+          <p className="text-xs font-normal text-neutral-600 mt-1">(กำลังโหลดข้อมูลอ้างอิงและคลังอุปกรณ์)</p>
         </div>
       ) : (
         <form onSubmit={handleSubmit}>
@@ -391,7 +400,10 @@ export default function BookingPage() {
                     1
                   </span>
                   <span className="font-bold text-black uppercase tracking-tight text-base">
-                    Customer & Authorized Staff
+                    1. Customer & Authorized Staff
+                    <span className="text-xs font-normal normal-case block sm:inline text-neutral-600 sm:ml-2">
+                      (ข้อมูลผู้เช่าและพนักงานผู้รับผิดชอบ)
+                    </span>
                   </span>
                 </div>
 
@@ -399,7 +411,7 @@ export default function BookingPage() {
                   {/* Customer Select */}
                   <div>
                     <label className="block text-xs font-bold text-black uppercase tracking-wider mb-1.5">
-                      Customer <span className="text-[#E8505B]">*</span>
+                      Customer <span className="text-[11px] font-normal text-neutral-600 lowercase">(ลูกค้าผู้เช่า)</span> <span className="text-[#E8505B]">*</span>
                     </label>
                     <select
                       value={customerId}
@@ -411,7 +423,7 @@ export default function BookingPage() {
                       }}
                       className="neo-select"
                     >
-                      <option value="">-- Select Customer --</option>
+                      <option value="">-- Select Customer (เลือกลูกค้าผู้เช่า) --</option>
                       {customers.map((c) => (
                         <option key={c.customer_id} value={c.customer_id}>
                           {c.full_name} ({c.phone})
@@ -426,7 +438,7 @@ export default function BookingPage() {
                   {/* Staff Select */}
                   <div>
                     <label className="block text-xs font-bold text-black uppercase tracking-wider mb-1.5">
-                      Staff Representative <span className="text-[#E8505B]">*</span>
+                      Staff Representative <span className="text-[11px] font-normal text-neutral-600 lowercase">(พนักงานผู้เปิดสัญญา)</span> <span className="text-[#E8505B]">*</span>
                     </label>
                     <select
                       value={staffId}
@@ -438,7 +450,7 @@ export default function BookingPage() {
                       }}
                       className="neo-select"
                     >
-                      <option value="">-- Select Staff --</option>
+                      <option value="">-- Select Staff (เลือกพนักงาน) --</option>
                       {staffList.map((s) => (
                         <option key={s.staff_id} value={s.staff_id}>
                           {s.full_name} ({s.role})
@@ -459,7 +471,10 @@ export default function BookingPage() {
                     2
                   </span>
                   <span className="font-bold text-black uppercase tracking-tight text-base">
-                    Rental Duration & Insurance
+                    2. Rental Duration & Insurance Policy
+                    <span className="text-xs font-normal normal-case block sm:inline text-neutral-600 sm:ml-2">
+                      (ระยะเวลาเช่าและแผนประกันภัย)
+                    </span>
                   </span>
                 </div>
 
@@ -467,7 +482,7 @@ export default function BookingPage() {
                   {/* Start Date */}
                   <div>
                     <label className="block text-xs font-bold text-black uppercase tracking-wider mb-1.5">
-                      Start Date <span className="text-[#E8505B]">*</span>
+                      Start Date <span className="text-[11px] font-normal text-neutral-600 lowercase">(วันที่เริ่มเช่า)</span> <span className="text-[#E8505B]">*</span>
                     </label>
                     <input
                       type="date"
@@ -492,7 +507,7 @@ export default function BookingPage() {
                   {/* End Date */}
                   <div>
                     <label className="block text-xs font-bold text-black uppercase tracking-wider mb-1.5">
-                      End Date <span className="text-[#E8505B]">*</span>
+                      End Date <span className="text-[11px] font-normal text-neutral-600 lowercase">(วันที่สิ้นสุดการเช่า)</span> <span className="text-[#E8505B]">*</span>
                     </label>
                     <input
                       type="date"
@@ -514,7 +529,7 @@ export default function BookingPage() {
                   {/* Insurance Plan */}
                   <div>
                     <label className="block text-xs font-bold text-black uppercase tracking-wider mb-1.5">
-                      Insurance Policy <span className="text-[#E8505B]">*</span>
+                      Insurance Policy <span className="text-[11px] font-normal text-neutral-600 lowercase">(แผนประกันภัย)</span> <span className="text-[#E8505B]">*</span>
                     </label>
                     <select
                       value={insuranceId}
@@ -526,7 +541,7 @@ export default function BookingPage() {
                       }}
                       className="neo-select"
                     >
-                      <option value="">-- Select Insurance Plan --</option>
+                      <option value="">-- Select Insurance Policy (เลือกแผนประกันภัย) --</option>
                       {insurancePlans.map((ins) => (
                         <option key={ins.insurance_id} value={ins.insurance_id}>
                           {ins.plan_name} (+{ins.fee_rate}%)
@@ -543,14 +558,14 @@ export default function BookingPage() {
                 <div className="flex flex-wrap items-center gap-3 p-3 bg-[#ECE6D8] rounded-[6px] border-2 border-black">
                   <div className="flex items-center gap-1.5 text-xs font-bold uppercase text-black">
                     <Clock className="w-4 h-4 stroke-[2.5]" />
-                    <span>Duration:</span>
+                    <span>Rental Duration (ระยะเวลาเช่า):</span>
                   </div>
                   <span className="px-2 py-0.5 rounded-[4px] border border-black bg-[#EDB92E] text-black font-bold text-xs font-mono">
-                    {calculation.isValidDates ? `${calculation.days} Days` : 'Invalid Dates'}
+                    {calculation.isValidDates ? `${calculation.days} Days (${calculation.days} วัน)` : 'Invalid Dates (วันที่ไม่ถูกต้อง)'}
                   </span>
                   {selectedInsurance && (
                     <span className="px-2 py-0.5 rounded-[4px] border border-black bg-[#F7F5EE] text-black font-bold text-xs">
-                      Plan: {selectedInsurance.plan_name} (Coverage Limit ฿{Number(selectedInsurance.coverage_limit || 0).toLocaleString()})
+                      Policy: {selectedInsurance.plan_name} (Coverage Limit: ฿{Number(selectedInsurance.coverage_limit || 0).toLocaleString()})
                     </span>
                   )}
                 </div>
@@ -564,12 +579,15 @@ export default function BookingPage() {
                       3
                     </span>
                     <span className="font-bold text-black uppercase tracking-tight text-base">
-                      Select Equipment Items
+                      3. Select Equipment Items
+                      <span className="text-xs font-normal normal-case block sm:inline text-neutral-600 sm:ml-2">
+                        (เลือกอุปกรณ์สำหรับสัญญาเช่า)
+                      </span>
                     </span>
                     <span className="text-[#E8505B] font-bold">*</span>
                   </div>
                   <span className="px-2.5 py-1 rounded-[4px] border-2 border-black bg-[#EDB92E] text-black font-bold text-xs">
-                    {selectedEquipmentIds.length} Items Selected
+                    {selectedEquipmentIds.length} Selected (เลือกแล้ว {selectedEquipmentIds.length} ชิ้น)
                   </span>
                 </div>
 
@@ -586,7 +604,7 @@ export default function BookingPage() {
                     <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-neutral-600" />
                     <input
                       type="text"
-                      placeholder="Search name or serial..."
+                      placeholder="Search equipment or serial number... (ค้นหาอุปกรณ์)"
                       value={eqSearch}
                       onChange={(e) => setEqSearch(e.target.value)}
                       className="neo-input pl-9 text-xs"
@@ -599,7 +617,7 @@ export default function BookingPage() {
                       onChange={(e) => setEqCategoryFilter(e.target.value)}
                       className="neo-select text-xs"
                     >
-                      <option value="">All Categories</option>
+                      <option value="">All Categories (ทุกหมวดหมู่)</option>
                       {categories.map((c) => (
                         <option key={c.id} value={c.id}>
                           {c.name}
@@ -616,7 +634,7 @@ export default function BookingPage() {
                         onChange={(e) => setOnlyAvailable(e.target.checked)}
                         className="w-4 h-4 border-2 border-black rounded-[3px] accent-black cursor-pointer"
                       />
-                      <span>Only Available Items</span>
+                      <span>Available Items Only <span className="text-[11px] font-normal text-neutral-600">(เฉพาะพร้อมให้เช่า)</span></span>
                     </label>
                   </div>
                 </div>
@@ -625,7 +643,10 @@ export default function BookingPage() {
                 <div className="max-h-96 overflow-y-auto divide-y-2 divide-black/10 border-3 border-black rounded-[6px] bg-[#F7F5EE]">
                   {filteredEquipment.length === 0 ? (
                     <div className="p-8 text-center text-neutral-500 font-bold text-sm">
-                      No equipment matches current criteria.
+                      No equipment items match the search filters.
+                      <span className="block text-xs font-normal text-neutral-500 mt-1">
+                        (ไม่พบอุปกรณ์ที่ตรงตามเงื่อนไขการค้นหา)
+                      </span>
                     </div>
                   ) : (
                     filteredEquipment.map((eq) => {
@@ -643,7 +664,7 @@ export default function BookingPage() {
                               ? 'bg-[#EDB92E]/25 border-l-4 border-l-black font-bold cursor-pointer'
                               : 'hover:bg-[#ECE6D8] cursor-pointer'
                           }`}
-                          title={!isAvailable ? `ไม่สามารถเลือกได้ (สถานะ: ${eq.status})` : 'คลิกเพื่อเลือก'}
+                          title={!isAvailable ? `Unavailable (สถานะ: ${eq.status})` : 'Click to select this item'}
                         >
                           <div className="flex items-center gap-3">
                             <div
@@ -668,7 +689,7 @@ export default function BookingPage() {
                                 <span>{eq.category_name}</span>
                                 {!isAvailable && (
                                   <span className="text-[#E8505B] text-[11px] font-bold">
-                                    [ไม่พร้อมให้เช่า / กำลังถูกเช่า]
+                                    [Unavailable / In Use (ไม่พร้อมให้เช่า)]
                                   </span>
                                 )}
                               </div>
@@ -680,7 +701,7 @@ export default function BookingPage() {
                               <div className="text-sm font-bold font-mono text-black">
                                 ฿{Number(eq.daily_rate).toLocaleString('th-TH', { minimumFractionDigits: 2 })}
                               </div>
-                              <div className="text-[10px] uppercase font-bold text-neutral-500">/ Day</div>
+                              <div className="text-[10px] uppercase font-bold text-neutral-500">/ Day (วัน)</div>
                             </div>
 
                             <span
@@ -692,7 +713,11 @@ export default function BookingPage() {
                                   : 'badge-rented'
                               }
                             >
-                              {eq.status}
+                              {eq.status === 'Available'
+                                ? 'Available (พร้อมเช่า)'
+                                : eq.status === 'Maintenance'
+                                ? 'Maintenance (ส่งซ่อม)'
+                                : 'Rented (กำลังถูกเช่า)'}
                             </span>
                           </div>
                         </div>
@@ -709,14 +734,17 @@ export default function BookingPage() {
                     4
                   </span>
                   <span className="font-bold text-black uppercase tracking-tight text-base">
-                    Deposit & Payment Method
+                    4. Security Deposit & Payment Method
+                    <span className="text-xs font-normal normal-case block sm:inline text-neutral-600 sm:ml-2">
+                      (เงินมัดจำและช่องทางชำระเงิน)
+                    </span>
                   </span>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-bold text-black uppercase tracking-wider mb-1.5">
-                      Deposit Amount (THB) <span className="text-[#E8505B]">*</span>
+                      Security Deposit (THB) <span className="text-[11px] font-normal text-neutral-600 lowercase">(เงินมัดจำ)</span> <span className="text-[#E8505B]">*</span>
                     </label>
                     <div className="relative">
                       <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-black font-bold text-sm">
@@ -743,17 +771,17 @@ export default function BookingPage() {
 
                   <div>
                     <label className="block text-xs font-bold text-black uppercase tracking-wider mb-1.5">
-                      Payment Method <span className="text-[#E8505B]">*</span>
+                      Payment Method <span className="text-[11px] font-normal text-neutral-600 lowercase">(ช่องทางชำระเงินมัดจำ)</span> <span className="text-[#E8505B]">*</span>
                     </label>
                     <select
                       value={paymentMethod}
                       onChange={(e) => setPaymentMethod(e.target.value)}
                       className="neo-select"
                     >
-                      <option value="Cash">Cash</option>
-                      <option value="Credit Card">Credit Card</option>
-                      <option value="Bank Transfer">Bank Transfer</option>
-                      <option value="PromptPay">PromptPay QR</option>
+                      <option value="Cash">Cash (เงินสด)</option>
+                      <option value="Credit Card">Credit Card (บัตรเครดิต)</option>
+                      <option value="Bank Transfer">Bank Transfer (โอนผ่านธนาคาร)</option>
+                      <option value="PromptPay">PromptPay (พร้อมเพย์ QR)</option>
                     </select>
                   </div>
                 </div>
@@ -769,23 +797,29 @@ export default function BookingPage() {
                   <div className="w-8 h-8 rounded-[4px] bg-[#EDB92E] border-2 border-black flex items-center justify-center">
                     <Receipt className="w-4 h-4 text-black stroke-[2.5]" />
                   </div>
-                  <h3 className="font-bold text-black uppercase tracking-tight text-base m-0">
-                    Rental Summary
-                  </h3>
+                  <div>
+                    <h3 className="font-bold text-black uppercase tracking-tight text-base m-0">
+                      Rental Summary
+                    </h3>
+                    <p className="text-[11px] font-bold text-neutral-600">สรุปยอดสัญญาเช่า</p>
+                  </div>
                 </div>
 
                 {/* Selected Items Breakdown */}
                 <div className="space-y-2 text-xs">
                   <div className="flex items-center justify-between font-bold uppercase text-neutral-600">
-                    <span>Selected Items</span>
+                    <span>Selected Equipment <span className="text-[10px] font-normal lowercase">(อุปกรณ์ที่เลือก)</span></span>
                     <span className="px-2 py-0.5 rounded-[4px] border border-black bg-black text-white text-[10px] font-mono font-bold">
-                      {selectedEquipmentObjects.length} Items
+                      {selectedEquipmentObjects.length} Units (ชิ้น)
                     </span>
                   </div>
 
                   {selectedEquipmentObjects.length === 0 ? (
                     <div className="p-4 bg-[#ECE6D8] rounded-[6px] border-2 border-black text-neutral-600 font-bold text-center">
-                      No items currently selected
+                      No equipment items selected yet.
+                      <span className="block text-[11px] font-normal text-neutral-500 mt-0.5">
+                        (ยังไม่ได้เลือกอุปกรณ์สำหรับสัญญาเช่า)
+                      </span>
                     </div>
                   ) : (
                     <div className="max-h-48 overflow-y-auto space-y-2 pr-1">
@@ -809,14 +843,14 @@ export default function BookingPage() {
                 {/* Calculation Summary Table */}
                 <div className="pt-3 border-t-3 border-black space-y-2 text-xs">
                   <div className="flex items-center justify-between font-bold">
-                    <span className="text-neutral-600">Duration:</span>
+                    <span className="text-neutral-600">Duration (ระยะเวลาเช่า):</span>
                     <span className="text-black font-mono font-bold">
-                      {calculation.isValidDates ? `${calculation.days} Days` : '—'}
+                      {calculation.isValidDates ? `${calculation.days} Days (${calculation.days} วัน)` : '—'}
                     </span>
                   </div>
 
                   <div className="flex items-center justify-between font-bold">
-                    <span className="text-neutral-600">Daily Subtotal:</span>
+                    <span className="text-neutral-600">Daily Subtotal (ค่าเช่ารวม/วัน):</span>
                     <span className="font-mono font-bold text-black">
                       ฿{calculation.sumDaily.toLocaleString('th-TH', { minimumFractionDigits: 2 })}
                     </span>
@@ -824,7 +858,7 @@ export default function BookingPage() {
 
                   <div className="flex items-center justify-between font-bold">
                     <span className="text-neutral-600">
-                      Insurance Fee ({selectedInsurance ? `${selectedInsurance.fee_rate}%` : '0%'}):
+                      Insurance Premium ({selectedInsurance ? `${selectedInsurance.fee_rate}%` : '0%'}):
                     </span>
                     <span className="font-mono font-bold text-black">
                       +฿{calculation.insuranceFee.toLocaleString('th-TH', { minimumFractionDigits: 2 })}
@@ -832,7 +866,7 @@ export default function BookingPage() {
                   </div>
 
                   <div className="flex items-center justify-between font-bold">
-                    <span className="text-neutral-600">Security Deposit:</span>
+                    <span className="text-neutral-600">Security Deposit (เงินมัดจำ):</span>
                     <span className="font-mono font-bold text-[#2F54EB]">
                       ฿{Number(depositAmount || 0).toLocaleString('th-TH', { minimumFractionDigits: 2 })}
                     </span>
@@ -842,7 +876,7 @@ export default function BookingPage() {
                   <div className="mt-4 p-4 rounded-[6px] bg-[#EDB92E] border-3 border-black shadow-neo text-black">
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold uppercase tracking-wider">
-                        Estimated Total Fee
+                        Estimated Total Fee <span className="block text-[10px] font-normal normal-case opacity-80">(ประมาณการยอดค่าเช่ารวม)</span>
                       </span>
                       <span className="text-xs font-mono font-bold px-1.5 py-0.5 rounded border border-black bg-[#F7F5EE]">THB</span>
                     </div>
@@ -850,7 +884,10 @@ export default function BookingPage() {
                       ฿{calculation.totalFee.toLocaleString('th-TH', { minimumFractionDigits: 2 })}
                     </div>
                     <div className="text-[10px] font-bold text-neutral-800 mt-1">
-                      Formula: Σ(daily_rate × days) × (1 + fee_rate)
+                      Formula: Σ(Daily Rate × Days) × (1 + Insurance Fee Rate)
+                      <span className="block text-[9px] font-normal text-neutral-700">
+                        (สูตรคำนวณ: Σ(ค่าเช่ารายวัน × จำนวนวัน) × (1 + ค่าธรรมเนียมประกัน))
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -864,18 +901,21 @@ export default function BookingPage() {
                   {submitting ? (
                     <>
                       <RefreshCw className="w-4 h-4 stroke-[2.5] animate-spin" />
-                      <span>Creating Contract...</span>
+                      <span>Processing Contract... (กำลังเปิดสัญญา)</span>
                     </>
                   ) : (
                     <>
                       <BadgeCheck className="w-5 h-5 stroke-[2.5]" />
-                      <span>Confirm & Create Rental</span>
+                      <span>Confirm & Create Rental <span className="text-xs font-normal normal-case block sm:inline opacity-80">(ยืนยันเปิดสัญญา)</span></span>
                     </>
                   )}
                 </button>
 
                 <p className="text-[11px] text-center font-bold text-neutral-600">
-                  Atomic Postgres Transaction with Stored Procedure Conflict Check
+                  Processed via PostgreSQL Stored Procedure with atomic transaction rollback.
+                  <span className="block text-[10px] font-normal text-neutral-500 mt-0.5">
+                    (ประมวลผลผ่าน PostgreSQL Stored Procedure พร้อม Rollback อัตโนมัติหากพบข้อผิดพลาด)
+                  </span>
                 </p>
               </div>
             </div>

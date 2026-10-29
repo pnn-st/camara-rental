@@ -279,11 +279,19 @@ export default function ReturnInspectionPage() {
          ───────────────────────────────────────────────────────────── */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-2">
         <div className="text-left">
-          <h1 className="text-4xl font-bold tracking-tight text-black uppercase leading-none">
-            Returns & Inspection
-          </h1>
-          <p className="text-base text-neutral-800 mt-2 font-medium">
-            Equipment condition assessment, automatic damage fee recalculation, and contract settlement.
+          <div className="flex items-center gap-3">
+            <h1 className="text-4xl font-bold tracking-tight text-black uppercase leading-none">
+              Returns & Inspection
+            </h1>
+            <span className="px-2.5 py-1 bg-[#EDB92E] border-2 border-black rounded-[4px] text-xs font-bold uppercase tracking-wider text-black">
+              ตรวจรับคืนและปิดสัญญา
+            </span>
+          </div>
+          <p className="text-sm sm:text-base text-neutral-800 mt-2 font-medium">
+            Inspect returned equipment condition, assess damage/repair costs, and reconcile security deposits.
+            <span className="block text-xs text-neutral-600 font-normal mt-0.5">
+              (ตรวจสอบสภาพอุปกรณ์รายชิ้น บันทึกค่าเสียหาย/ค่าซ่อมบำรุง ปรับสถานะอุปกรณ์อัตโนมัติ และคำนวณเคลียร์เงินมัดจำสุทธิ)
+            </span>
           </p>
         </div>
 
@@ -294,7 +302,7 @@ export default function ReturnInspectionPage() {
           className="neo-btn neo-btn-secondary shrink-0"
         >
           <RefreshCw className={`w-4 h-4 stroke-[2.5] ${refreshing ? 'animate-spin' : ''}`} />
-          <span>Refresh Active Rentals</span>
+          <span>Refresh Rentals <span className="text-xs font-normal opacity-80">(รีเฟรชสัญญา)</span></span>
         </button>
       </div>
 
@@ -306,13 +314,13 @@ export default function ReturnInspectionPage() {
               <AlertCircle className="w-5 h-5 stroke-[2.5] shrink-0 mt-0.5" />
               <div className="flex-1">
                 <div className="text-xs font-bold uppercase tracking-wider">
-                  Transaction Error (Rolled Back)
+                  Database Transaction Error (Rolled Back) <span className="font-normal opacity-90">• ข้อผิดพลาดในธุรกรรมฐานข้อมูล</span>
                 </div>
                 <div className="mt-1 p-2.5 bg-[#F7F5EE] border-2 border-black rounded-[4px] font-mono text-xs font-bold text-black break-words">
                   {serverError}
                 </div>
                 <p className="mt-1 text-[11px] font-bold text-white/90">
-                  Automatic rollback executed. System integrity preserved.
+                  Automatic rollback executed. No partial data was committed to the database. (ระบบย้อนกลับรายการอัตโนมัติ)
                 </p>
               </div>
             </div>
@@ -335,34 +343,34 @@ export default function ReturnInspectionPage() {
               <CheckCircle2 className="w-6 h-6 stroke-[2.5] shrink-0 mt-0.5" />
               <div>
                 <h3 className="text-lg font-bold uppercase tracking-tight">
-                  Return & Inspection Processed Successfully
+                  Return Processed Successfully <span className="text-sm font-normal normal-case block sm:inline">(ตรวจรับคืนและบันทึกผลสำเร็จ)</span>
                 </h3>
                 <p className="text-sm font-medium text-black mt-1">
-                  Checked in <strong>{successInfo.returnedCount} items</strong> for Contract{' '}
+                  Checked in <strong>{successInfo.returnedCount} units (ชิ้น)</strong> for Rental Contract{' '}
                   <strong className="font-mono bg-[#F7F5EE] px-2 py-0.5 rounded-[4px] border border-black">
                     #{successInfo.rental_id}
                   </strong>
                   {successInfo.completed ? (
                     <span className="ml-2 inline-flex items-center px-2 py-0.5 text-xs font-bold border border-black rounded-[4px] bg-black text-white uppercase">
-                      Contract Completed
+                      Contract Completed (ปิดสัญญาเรียบร้อย)
                     </span>
                   ) : (
                     <span className="ml-2 inline-flex items-center px-2 py-0.5 text-xs font-bold border border-black rounded-[4px] bg-[#EDB92E] text-black uppercase">
-                      Remaining Items Pending
+                      Items Pending (ยังมีอุปกรณ์ค้างส่ง)
                     </span>
                   )}
                 </p>
                 {successInfo.updatedRental && (
                   <div className="mt-2 flex flex-wrap items-center gap-4 text-xs font-bold text-black">
                     <span>
-                      Accumulated Damage Fee (Trigger):{' '}
+                      Accrued Damage Fee (ค่าเสียหายสะสม):{' '}
                       <strong className="font-mono">
                         ฿{Number(successInfo.updatedRental.total_damage_fee || 0).toLocaleString()}
                       </strong>
                     </span>
                     <span>•</span>
                     <span>
-                      Status:{' '}
+                      Contract Status (สถานะสัญญา):{' '}
                       <span className="px-2 py-0.5 rounded-[4px] border border-black bg-[#F7F5EE] text-black uppercase font-bold">
                         {successInfo.updatedRental.rental_status}
                       </span>
@@ -385,16 +393,20 @@ export default function ReturnInspectionPage() {
       {loading ? (
         <div className="neo-card p-16 text-center text-black">
           <RefreshCw className="w-8 h-8 animate-spin mx-auto text-black mb-3" />
-          <p className="text-sm font-bold uppercase tracking-wider">Loading active rental contracts...</p>
+          <p className="text-sm font-bold uppercase tracking-wider">Loading Active Rentals...</p>
+          <p className="text-xs font-normal text-neutral-600 mt-1">(กำลังโหลดสัญญาเช่าที่เปิดอยู่)</p>
         </div>
       ) : activeRentals.length === 0 ? (
         <div className="neo-card p-16 text-center text-black">
           <div className="w-14 h-14 rounded-[6px] bg-[#48C78E] border-3 border-black shadow-neo flex items-center justify-center mx-auto mb-4">
             <CheckCircle2 className="w-8 h-8 text-black stroke-[2.5]" />
           </div>
-          <h3 className="text-2xl font-bold text-black uppercase">No Active Rentals Outstanding</h3>
-          <p className="text-sm font-medium text-neutral-700 mt-2">
-            All equipment items have been returned and closed, or no active contracts have been opened yet.
+          <h3 className="text-2xl font-bold text-black uppercase">No Active Rentals Pending</h3>
+          <p className="text-sm font-normal text-neutral-700 mt-2">
+            All equipment items have been returned and inspected, or there are no active contracts open at this time.
+            <span className="block text-xs text-neutral-600 mt-1">
+              (อุปกรณ์ทั้งหมดได้รับการตรวจรับคืนครบถ้วน หรือยังไม่มีสัญญาเช่าเปิดอยู่ขณะนี้)
+            </span>
           </p>
         </div>
       ) : (
@@ -407,10 +419,12 @@ export default function ReturnInspectionPage() {
               <div className="flex items-center justify-between pb-3 border-b-3 border-black">
                 <div className="font-bold text-black text-sm flex items-center gap-2 uppercase">
                   <Clock className="w-4 h-4 stroke-[2.5]" />
-                  <span>Active Rentals</span>
+                  <span>
+                    Active Rentals <span className="text-xs font-normal normal-case text-neutral-600">(สัญญาเช่าที่เปิดอยู่)</span>
+                  </span>
                 </div>
                 <span className="px-2 py-0.5 rounded-[4px] border border-black bg-[#EDB92E] text-black font-mono font-bold text-xs">
-                  {activeRentals.length} Contracts
+                  {activeRentals.length} Contracts (สัญญา)
                 </span>
               </div>
 
@@ -419,7 +433,7 @@ export default function ReturnInspectionPage() {
                 <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-600" />
                 <input
                   type="text"
-                  placeholder="Search contract ID, customer..."
+                  placeholder="Search contract ID, customer, phone... (ค้นหาสัญญา)"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   className="neo-input pl-10 text-xs"
@@ -453,7 +467,7 @@ export default function ReturnInspectionPage() {
                               : 'bg-[#48C78E] text-black'
                           }`}
                         >
-                          {unreturnedCount} Items Due
+                          {unreturnedCount > 0 ? `Due: ${unreturnedCount} Units (ค้างส่ง)` : 'Completed (ครบ)'}
                         </span>
                       </div>
 
@@ -486,10 +500,10 @@ export default function ReturnInspectionPage() {
                     <div>
                       <div className="flex items-center gap-2">
                         <span className="px-2 py-0.5 rounded-[4px] border border-black bg-black text-white font-mono font-bold text-xs">
-                          RENTAL #{selectedRental.rental_id}
+                          Rental #{selectedRental.rental_id} <span className="font-normal opacity-80">(สัญญาเช่า)</span>
                         </span>
                         <span className="px-2 py-0.5 rounded-[4px] border border-black bg-[#EDB92E] text-black font-bold text-xs uppercase">
-                          {selectedRental.rental_status}
+                          {selectedRental.rental_status === 'Active' ? 'Active (กำลังเช่าอยู่)' : selectedRental.rental_status}
                         </span>
                       </div>
                       <h2 className="text-2xl font-bold text-black uppercase mt-2 m-0">
@@ -498,33 +512,33 @@ export default function ReturnInspectionPage() {
                     </div>
 
                     <div className="text-xs font-medium text-black text-left sm:text-right">
-                      <div>Phone: <strong className="font-mono">{selectedRental.customer_phone}</strong></div>
-                      <div>Email: <span className="font-mono">{selectedRental.customer_email}</span></div>
+                      <div>Phone (โทร): <strong className="font-mono">{selectedRental.customer_phone}</strong></div>
+                      <div>Email (อีเมล): <span className="font-mono">{selectedRental.customer_email || '—'}</span></div>
                     </div>
                   </div>
 
                   {/* Financial & Plan Badges */}
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 bg-[#ECE6D8] p-3.5 rounded-[6px] border-2 border-black text-xs">
                     <div className="min-w-0">
-                      <span className="text-neutral-600 font-bold block uppercase text-[10px]">Rental Period</span>
+                      <span className="text-neutral-600 font-bold block uppercase text-[10px]">Rental Period (ระยะเวลาเช่า)</span>
                       <strong className="text-black font-mono font-bold text-[11px] sm:text-xs block whitespace-nowrap">
                         {selectedRental.start_date?.slice(0, 10)} → {selectedRental.end_date?.slice(0, 10)}
                       </strong>
                     </div>
                     <div className="min-w-0">
-                      <span className="text-neutral-600 font-bold block uppercase text-[10px]">Insurance Plan</span>
+                      <span className="text-neutral-600 font-bold block uppercase text-[10px]">Insurance Policy (ประกันภัย)</span>
                       <strong className="text-black font-bold block truncate">
                         {selectedRental.insurance_name} (+{selectedRental.insurance_fee_rate}%)
                       </strong>
                     </div>
                     <div className="min-w-0">
-                      <span className="text-neutral-600 font-bold block uppercase text-[10px]">Security Deposit</span>
+                      <span className="text-neutral-600 font-bold block uppercase text-[10px]">Security Deposit (เงินมัดจำ)</span>
                       <strong className="text-[#2F54EB] font-mono font-bold block whitespace-nowrap">
                         ฿{Number(selectedRental.deposit_amount || 0).toLocaleString()}
                       </strong>
                     </div>
                     <div className="min-w-0">
-                      <span className="text-neutral-600 font-bold block uppercase text-[10px]">Total Contract Fee</span>
+                      <span className="text-neutral-600 font-bold block uppercase text-[10px]">Contract Fee (ค่าเช่าตามสัญญา)</span>
                       <strong className="text-black font-mono font-bold block whitespace-nowrap">
                         ฿{Number(selectedRental.total_rental_fee || 0).toLocaleString()}
                       </strong>
@@ -535,7 +549,7 @@ export default function ReturnInspectionPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
                     <div>
                       <label className="block text-xs font-bold text-black uppercase tracking-wider mb-1.5">
-                        Inspecting Staff Member <span className="text-[#E8505B]">*</span>
+                        Inspecting Staff <span className="text-[11px] font-normal text-neutral-600 lowercase">(พนักงานผู้ตรวจรับ)</span> <span className="text-[#E8505B]">*</span>
                       </label>
                       <select
                         value={inspectorStaffId}
@@ -552,7 +566,7 @@ export default function ReturnInspectionPage() {
 
                     <div>
                       <label className="block text-xs font-bold text-black uppercase tracking-wider mb-1.5">
-                        Return Date <span className="text-[#E8505B]">*</span>
+                        Actual Return Date <span className="text-[11px] font-normal text-neutral-600 lowercase">(วันที่ตรวจรับจริง)</span> <span className="text-[#E8505B]">*</span>
                       </label>
                       <input
                         type="date"
@@ -569,10 +583,15 @@ export default function ReturnInspectionPage() {
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b-3 border-black gap-2">
                     <div className="font-bold text-black text-sm flex items-center gap-2 uppercase">
                       <Camera className="w-4 h-4 stroke-[2.5]" />
-                      <span>Contract Items ({selectedRental.items?.length || 0} Total)</span>
+                      <span>
+                        Contract Items
+                        <span className="text-xs font-normal normal-case text-neutral-600 ml-2">
+                          ({selectedRental.items?.length || 0} Total Units / รายการอุปกรณ์)
+                        </span>
+                      </span>
                     </div>
                     <span className="text-xs font-bold text-neutral-700">
-                      Select items below to inspect and check-in
+                      Check items below to inspect and return to inventory <span className="font-normal">(ติ๊กเลือกเพื่อตรวจรับคืน)</span>
                     </span>
                   </div>
 
@@ -611,7 +630,7 @@ export default function ReturnInspectionPage() {
                                   <span>{item.equipment_name}</span>
                                   {isReturned && (
                                     <span className="badge-available text-[10px]">
-                                      Returned on {item.returned_at?.slice(0, 10)}
+                                      Returned on {item.returned_at?.slice(0, 10)} (รับคืนแล้ว)
                                     </span>
                                   )}
                                 </div>
@@ -632,7 +651,7 @@ export default function ReturnInspectionPage() {
                               {/* Condition Note */}
                               <div className="sm:col-span-1">
                                 <label className="block text-xs font-bold text-black mb-1">
-                                  Condition Note
+                                  Condition Note <span className="text-[11px] font-normal text-neutral-600 lowercase">(บันทึกสภาพ)</span>
                                 </label>
                                 <input
                                   type="text"
@@ -644,7 +663,7 @@ export default function ReturnInspectionPage() {
                                       e.target.value
                                     )
                                   }
-                                  placeholder="e.g. Lens clear, no scratch"
+                                  placeholder="e.g. Good condition, clean lens (สภาพสมบูรณ์)"
                                   className="neo-input text-xs py-1.5 min-h-[40px]"
                                 />
                               </div>
@@ -652,7 +671,7 @@ export default function ReturnInspectionPage() {
                               {/* Damage Fee */}
                               <div>
                                 <label className="block text-xs font-bold text-black mb-1">
-                                  Damage Fee (THB)
+                                  Assessed Damage Fee (THB) <span className="text-[11px] font-normal text-neutral-600 lowercase">(ค่าเสียหาย)</span>
                                 </label>
                                 <div className="relative">
                                   <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-black font-bold text-xs">
@@ -678,7 +697,7 @@ export default function ReturnInspectionPage() {
                               {/* Repair Cost */}
                               <div>
                                 <label className="block text-xs font-bold text-black mb-1">
-                                  Repair Cost (THB)
+                                  Actual Repair Cost (THB) <span className="text-[11px] font-normal text-neutral-600 lowercase">(ค่าซ่อมแซม)</span>
                                 </label>
                                 <div className="relative">
                                   <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-black font-bold text-xs">
@@ -712,38 +731,43 @@ export default function ReturnInspectionPage() {
                 <div className="neo-card space-y-4">
                   <div className="flex items-center gap-2 pb-3 border-b-3 border-black font-bold text-black text-sm uppercase">
                     <Receipt className="w-4 h-4 stroke-[2.5]" />
-                    <span>Settlement & Final Accounting</span>
+                    <span>
+                      Settlement & Final Accounting
+                      <span className="text-xs font-normal normal-case text-neutral-600 ml-2">
+                        (สรุปยอดชำระและการปิดบัญชี)
+                      </span>
+                    </span>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     {/* Breakdown */}
                     <div className="space-y-2 text-xs bg-[#ECE6D8] p-4 rounded-[6px] border-2 border-black font-bold">
                       <div className="flex justify-between text-neutral-700">
-                        <span>Original Rental Fee:</span>
+                        <span>Original Rental Fee (ค่าเช่าตามสัญญา):</span>
                         <span className="font-mono text-black font-bold">
                           ฿{Number(selectedRental.total_rental_fee || 0).toLocaleString()}
                         </span>
                       </div>
                       <div className="flex justify-between text-neutral-700">
-                        <span>Previous Accumulated Damage:</span>
+                        <span>Previous Accrued Damage (ค่าเสียหายสะสมเดิม):</span>
                         <span className="font-mono text-black font-bold">
                           ฿{Number(selectedRental.total_damage_fee || 0).toLocaleString()}
                         </span>
                       </div>
                       <div className="flex justify-between text-[#E8505B]">
-                        <span>+ Assessed Damage / Repair (Trigger):</span>
+                        <span>+ Assessed Damage / Repair (ค่าเสียหาย/ค่าซ่อมรอบนี้):</span>
                         <span className="font-mono font-bold">
                           +฿{(returnFinancials.assessedDamage + returnFinancials.assessedRepair).toLocaleString()}
                         </span>
                       </div>
                       <div className="flex justify-between text-emerald-800">
-                        <span>- Security Deposit Credit:</span>
+                        <span>- Security Deposit Deduction (หักเงินมัดจำ):</span>
                         <span className="font-mono font-bold">
                           -฿{Number(selectedRental.deposit_amount || 0).toLocaleString()}
                         </span>
                       </div>
                       <div className="pt-2 border-t-2 border-black flex justify-between text-sm font-bold text-black">
-                        <span>Net Balance Due:</span>
+                        <span>Net Balance Due (ยอดคงเหลือที่ต้องชำระ):</span>
                         <span className="font-mono text-base bg-[#EDB92E] px-2 py-0.5 rounded border border-black">
                           ฿{returnFinancials.remainingToPay.toLocaleString('th-TH', { minimumFractionDigits: 2 })}
                         </span>
@@ -754,22 +778,22 @@ export default function ReturnInspectionPage() {
                     <div className="space-y-3">
                       <div>
                         <label className="block text-xs font-bold text-black uppercase mb-1">
-                          Payment Classification
+                          Payment Classification <span className="text-[11px] font-normal text-neutral-600 lowercase">(ประเภทการชำระเงิน)</span>
                         </label>
                         <select
                           value={paymentType}
                           onChange={(e) => setPaymentType(e.target.value)}
                           className="neo-select text-xs"
                         >
-                          <option value="Settlement">Settlement (Outstanding rental balance)</option>
-                          <option value="Fine">Fine (Damage & repair penalty)</option>
+                          <option value="Settlement">Settlement (ชำระปิดยอดสัญญาเช่าคงค้าง)</option>
+                          <option value="Fine">Fine (ชำระค่าปรับ/ค่าเสียหายอุปกรณ์)</option>
                         </select>
                       </div>
 
                       <div className="grid grid-cols-2 gap-3">
                         <div>
                           <label className="block text-xs font-bold text-black uppercase mb-1">
-                            Amount (THB)
+                            Payment Amount (THB) <span className="text-[11px] font-normal text-neutral-600 lowercase">(ยอดชำระ)</span>
                           </label>
                           <input
                             type="number"
@@ -783,17 +807,17 @@ export default function ReturnInspectionPage() {
 
                         <div>
                           <label className="block text-xs font-bold text-black uppercase mb-1">
-                            Payment Method
+                            Payment Method <span className="text-[11px] font-normal text-neutral-600 lowercase">(ช่องทางชำระเงิน)</span>
                           </label>
                           <select
                             value={paymentMethod}
                             onChange={(e) => setPaymentMethod(e.target.value)}
                             className="neo-select text-xs"
                           >
-                            <option value="Cash">Cash</option>
-                            <option value="Credit Card">Credit Card</option>
-                            <option value="Bank Transfer">Bank Transfer</option>
-                            <option value="PromptPay">PromptPay QR</option>
+                            <option value="Cash">Cash (เงินสด)</option>
+                            <option value="Credit Card">Credit Card (บัตรเครดิต)</option>
+                            <option value="Bank Transfer">Bank Transfer (โอนผ่านธนาคาร)</option>
+                            <option value="PromptPay">PromptPay (พร้อมเพย์ QR)</option>
                           </select>
                         </div>
                       </div>
@@ -810,12 +834,17 @@ export default function ReturnInspectionPage() {
                       {submitting ? (
                         <>
                           <RefreshCw className="w-4 h-4 stroke-[2.5] animate-spin" />
-                          <span>Executing Transaction...</span>
+                          <span>Processing Return... (กำลังบันทึก)</span>
                         </>
                       ) : (
                         <>
                           <Check className="w-5 h-5 stroke-[2.5]" />
-                          <span>Confirm Return & Settle ({returningItems.length} Items)</span>
+                          <span>
+                            Confirm Return & Settle ({returningItems.length} Items)
+                            <span className="text-xs font-normal normal-case block sm:inline opacity-80 sm:ml-1.5">
+                              (ยืนยันตรวจรับและปิดยอด)
+                            </span>
+                          </span>
                         </>
                       )}
                     </button>
@@ -824,7 +853,10 @@ export default function ReturnInspectionPage() {
               </form>
             ) : (
               <div className="neo-card p-12 text-center text-neutral-600 font-bold">
-                Please select an active rental contract from the left panel.
+                Please select an active rental contract from the left panel to begin inspection.
+                <span className="block text-xs font-normal text-neutral-500 mt-1">
+                  (กรุณาคลิกเลือกสัญญาเช่าจากแถบด้านซ้ายเพื่อดำเนินการตรวจรับอุปกรณ์)
+                </span>
               </div>
             )}
           </div>
