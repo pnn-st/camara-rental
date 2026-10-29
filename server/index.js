@@ -40,13 +40,13 @@ const clientDistPath = path.join(__dirname, '../client/dist');
 app.use(express.static(clientDistPath));
 
 // Fallback to client/dist/index.html for SPA routes (non-API)
-app.get('*', (req, res, next) => {
-  if (req.path.startsWith('/api')) {
-    return res.status(404).json({ error: `Route not found: ${req.method} ${req.originalUrl}` });
+app.use((req, res, next) => {
+  if (req.method === 'GET' && !req.path.startsWith('/api')) {
+    return res.sendFile(path.join(clientDistPath, 'index.html'), (err) => {
+      if (err) next();
+    });
   }
-  res.sendFile(path.join(clientDistPath, 'index.html'), (err) => {
-    if (err) next();
-  });
+  next();
 });
 
 // 404 Not Found handler for unhandled requests
