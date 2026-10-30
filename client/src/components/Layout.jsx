@@ -117,6 +117,85 @@ export default function Layout() {
         <main className="flex-1 w-full max-w-[1200px] mx-auto p-6 md:p-8">
           <Outlet />
         </main>
+
+        {/* ─────────────────────────────────────────────────────────────
+            GLOBAL FOOTER: Team Credits
+           ───────────────────────────────────────────────────────────── */}
+        <footer className="w-full border-t-3 border-black bg-[#F7F5EE] py-6 px-6 md:px-8 mt-auto">
+          <div className="max-w-[1200px] mx-auto">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 mb-4 border-b-2 border-black/15">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 bg-[#EDB92E] border-2 border-black inline-block"></span>
+                <span className="text-xs font-black uppercase tracking-wider text-black">
+                  Project Development Team · สมาชิกผู้จัดทำโครงงาน
+                </span>
+              </div>
+              <span className="text-[11px] font-mono font-bold text-neutral-600">
+                Topic 30: Camera & Equipment Rental System
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              {/* Member 1: DBA */}
+              <div className="bg-[#ECE6D8] border-2 border-black rounded-[6px] p-3 shadow-[3px_3px_0px_#000000] flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between gap-1 mb-1">
+                    <span className="font-mono font-bold text-xs bg-[#EDB92E] px-1.5 py-0.5 border border-black rounded-[3px] text-black">
+                      67363030
+                    </span>
+                    <span className="text-[10px] font-mono font-bold text-neutral-700 uppercase">DBA</span>
+                  </div>
+                  <div className="font-bold text-sm text-black">
+                    นายนพกร กันทากาศ
+                  </div>
+                </div>
+                <div className="mt-2 pt-2 border-t border-black/15 text-[11px] text-neutral-700 font-medium">
+                  DBA / ออกแบบฐานข้อมูล
+                </div>
+              </div>
+
+              {/* Member 2: Backend */}
+              <div className="bg-[#ECE6D8] border-2 border-black rounded-[6px] p-3 shadow-[3px_3px_0px_#000000] flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between gap-1 mb-1">
+                    <span className="font-mono font-bold text-xs bg-[#2F54EB] px-1.5 py-0.5 border border-black rounded-[3px] text-white">
+                      67363849
+                    </span>
+                    <span className="text-[10px] font-mono font-bold text-neutral-700 uppercase">Backend</span>
+                  </div>
+                  <div className="font-bold text-sm text-black">
+                    นายปุณณัตถ์ พรหมเลิศ
+                  </div>
+                </div>
+                <div className="mt-2 pt-2 border-t border-black/15 text-[11px] text-neutral-700 font-medium">
+                  Backend / ฝั่งฐานข้อมูล
+                </div>
+              </div>
+
+              {/* Member 3: Full-stack & Frontend */}
+              <div className="bg-[#ECE6D8] border-2 border-black rounded-[6px] p-3 shadow-[3px_3px_0px_#000000] flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between gap-1 mb-1">
+                    <span className="font-mono font-bold text-xs bg-[#48C78E] px-1.5 py-0.5 border border-black rounded-[3px] text-black">
+                      67366536
+                    </span>
+                    <span className="text-[10px] font-mono font-bold text-neutral-700 uppercase">Full-stack</span>
+                  </div>
+                  <div className="font-bold text-sm text-black">
+                    นางสาวเหมหงษ์ จำปานวน
+                  </div>
+                </div>
+                <div className="mt-2 pt-2 border-t border-black/15 text-[11px] text-neutral-700 font-medium">
+                  Full-stack / ฝั่งเว็บและนำเสนอ
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-4 pt-3 border-t border-black/10 text-center text-[11px] text-neutral-600 font-mono">
+              © Cam Rental · Database Management System Project
+            </div>
+          </div>
+        </footer>
       </div>
     </div>
   );
